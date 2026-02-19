@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -16,7 +17,7 @@ namespace FancyWeatherAPI.API
 
             if (jsonFiles == null)
             {
-                Plugin.logger.LogError("[AnimationLoader] ASCII_Anim folder not found !");
+                Plugin.logger.LogError("[AnimationLoader] ASCII_Anim folder not found");
                 return;
             }
 
@@ -26,15 +27,14 @@ namespace FancyWeatherAPI.API
 
                 Plugin.DebugLog($"[AnimationLoader] Found animation file, now loading: {fileName}");
 
-                if (LoadAnimationFromFile(filePath))
-                    Plugin.DebugLog($"[AnimationLoader] The file {fileName} has loaded a custom animation !");
-                else
-                    Plugin.DebugLog($"[AnimationLoader] The file {fileName} has failed to load a custom animation !");
+                int nbAnim = LoadAnimationFromFile(filePath);
+
+                Plugin.DebugLog($"[AnimationLoader] The file {fileName} has loaded {nbAnim} custom animations");
             }
         }
 
 
-        private static bool LoadAnimationFromFile(string filePath)
+        private static int LoadAnimationFromFile(string filePath)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace FancyWeatherAPI.API
                 if (text == null || text.Length <= 0)
                 {
                     Plugin.logger.LogError("[AnimationLoader] The file is empty or null");
-                    return false;
+                    return 0;
                 }
 
                 bool scanningParameters = false;
@@ -54,6 +54,10 @@ namespace FancyWeatherAPI.API
                     string trimmedLine = line.ToLower().Trim();
                     if (trimmedLine == "parameters")
                     {
+                        if (animation != null && animation.IsValid() && animation.Name != null)
+                        {
+                            LoadedAnimations.TryAdd(animation.Name, animation);
+                        }
                         animation = new FancyWeatherAnimation();
                         scanningParameters = true;
                         scanningFrames = false;
@@ -81,12 +85,18 @@ namespace FancyWeatherAPI.API
                             animation.Frames.Add(line);
                     }
                 }
-                return true;
+
+                if (animation != null && animation.IsValid() && animation.Name != null)
+                {
+                    LoadedAnimations.TryAdd(animation.Name, animation);
+                }
+
+                return LoadedAnimations.Count;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Plugin.logger.LogError($"[AnimationLoader] Unexpected error while reading the file : {ex}");
-                return false;
+                return 0;
             }
         }
     }
