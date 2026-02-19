@@ -61,18 +61,20 @@ namespace FancyWeatherAPI.API
                         animation = new FancyWeatherAnimation();
                         scanningParameters = true;
                         scanningFrames = false;
+                        Plugin.logger.LogError("parameters");
                     }
-                    else if (trimmedLine == "frames")
+                    else if (trimmedLine == "animation")
                     {
                         scanningParameters = false;
                         scanningFrames = true;
+                        Plugin.logger.LogError("animation");
                     }
                     else if (scanningParameters)
                     {
                         string[] parts = line.Split(':');
                         if (parts.Length != 2)
                             continue;
-                        string key = parts[0].Trim();
+                        string key = parts[0].ToLower().Trim();
                         string value = parts[1].Trim();
                         if (key == "name")
                             animation.Name = value;
@@ -82,13 +84,25 @@ namespace FancyWeatherAPI.API
                     else if (scanningFrames)
                     {
                         if (!string.IsNullOrWhiteSpace(line))
-                            animation.Frames.Add(line);
+                        {
+                            string lineToAdd = line;
+                            if (lineToAdd.Length < 8)
+                            {
+                                lineToAdd = lineToAdd.PadRight(8, ' ');
+                            }
+                            animation.Frames.Add(lineToAdd);
+                        }
                     }
                 }
 
+                Plugin.logger.LogError(animation.Name);
+                Plugin.logger.LogError(animation.WithOverlay);
+                Plugin.logger.LogError(animation.Frames.Count);
+
                 if (animation != null && animation.IsValid() && animation.Name != null)
                 {
-                    LoadedAnimations.TryAdd(animation.Name, animation);
+                    bool v = LoadedAnimations.TryAdd(animation.Name, animation);
+                    Plugin.logger.LogError("valid: " + v);
                 }
 
                 return LoadedAnimations.Count;

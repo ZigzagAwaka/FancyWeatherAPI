@@ -56,6 +56,9 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\_utils\Librairies\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="WeatherRegistry">
+      <HintPath>..\_utils\Librairies\WeatherRegistry.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

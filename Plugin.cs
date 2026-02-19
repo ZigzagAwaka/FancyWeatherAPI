@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using FancyWeatherAPI.API;
 using HarmonyLib;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace FancyWeatherAPI
 {
     [BepInPlugin(GUID, NAME, VERSION)]
     [BepInDependency("ShaosilGaming.GeneralImprovements")]
+    [BepInDependency("mrov.WeatherRegistry")]
     public class Plugin : BaseUnityPlugin
     {
         const string GUID = "zigzag.fancyweatherapi";
@@ -31,9 +33,12 @@ namespace FancyWeatherAPI
         {
             instance = this;
             logger = Logger;
-            config = new Config(Config);
 
+            config = new Config(Config);
             config.SetupCustomConfigs();
+
+            AnimationLoader.LoadAllAnimationFiles();
+
             harmony.PatchAll();
 
             logger.LogInfo($"{NAME} is loaded !");
