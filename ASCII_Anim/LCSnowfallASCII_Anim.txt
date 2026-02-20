@@ -1,6 +1,6 @@
 Parameters
 Name: Snowfall
-WithOverlay: false
+LightningOverlay: false
 
 Animation
 

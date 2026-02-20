@@ -38,6 +38,7 @@ namespace FancyWeatherAPI
             config.SetupCustomConfigs();
 
             AnimationLoader.LoadAllAnimationFiles();
+            AnimationLoader.LoadAllPredefinedAnimations();
 
             harmony.PatchAll();
 

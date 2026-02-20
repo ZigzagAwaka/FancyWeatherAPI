@@ -1,0 +1,52 @@
+Parameters
+Name: Toxic Smog
+LightningOverlay: true
+
+Animation
+
+(~~~~~~)
+(~~~~~~)
+  . + * .
+ * + * .
+
+(~~~~~~)
+(~~~~~~)
+   + . + *
+  . + * .
+
+(~~~~~~)
+(~~~~~~)
+  . + * .
+   + . + *
+
+(~~~~~~)
+(~~~~~~)
+   * + * +
+  . + * .
+
+(~~~~~~)
+(~~~~~~)
+  * . + .
+ . * + * +
+
+(~~~~~~)
+(~~~~~~)
+   * + * .
+  * . + .
+
+
+Parameters
+Name: Heatwave
+LightningOverlay: false
+
+Animation
+
+/*--s
+sd
+qrg
+qr
+
+74556
+ssssss
+uuu
+f

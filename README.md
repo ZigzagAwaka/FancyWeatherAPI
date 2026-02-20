@@ -40,7 +40,7 @@ The format of the file is the following :
 ```
 Parameters
 Name: Snowfall
-WithOverlay: false
+LightningOverlay: false
 
 Animation
 
@@ -85,7 +85,7 @@ Each time a new Parameters area is detected in the file, there will be a new ani
 
 - **Name:** Use this parameter to define the name of the targeted weather to display this animation. This needs to match the weather name in-game perfectly in order to work. **(this parameter is required)**
 
-- **WithOverlay:** Set this parameter to true to activate the special Stormy thunder overlay on top of your animation. **(this parameter is optional)**
+- **LightningOverlay:** Set this parameter to true to activate the special Stormy thunder overlay on top of your animation. **(this parameter is optional)**
 
 ### **Animation**
 
