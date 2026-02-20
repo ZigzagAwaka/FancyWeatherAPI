@@ -61,13 +61,11 @@ namespace FancyWeatherAPI.API
                         animation = new FancyWeatherAnimation();
                         scanningParameters = true;
                         scanningFrames = false;
-                        Plugin.logger.LogError("parameters");
                     }
                     else if (trimmedLine == "animation")
                     {
                         scanningParameters = false;
                         scanningFrames = true;
-                        Plugin.logger.LogError("animation");
                     }
                     else if (scanningParameters)
                     {
@@ -94,10 +92,6 @@ namespace FancyWeatherAPI.API
                         }
                     }
                 }
-
-                Plugin.logger.LogError(animation.Name);
-                Plugin.logger.LogError(animation.WithOverlay);
-                Plugin.logger.LogError(animation.Frames.Count);
 
                 if (animation != null && animation.IsValid() && animation.Name != null)
                 {
