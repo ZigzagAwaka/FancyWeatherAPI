@@ -45,6 +45,7 @@ namespace FancyWeatherAPI.API
                     return 0;
                 }
 
+                int nbAnim = 0;
                 bool scanningParameters = false;
                 bool scanningFrames = false;
                 FancyWeatherAnimation animation = new FancyWeatherAnimation();
@@ -56,7 +57,8 @@ namespace FancyWeatherAPI.API
                     {
                         if (animation != null && animation.IsValid() && animation.Name != null)
                         {
-                            LoadedAnimations.TryAdd(animation.Name, animation);
+                            if (LoadedAnimations.TryAdd(animation.Name, animation))
+                                nbAnim++;
                         }
                         animation = new FancyWeatherAnimation();
                         scanningParameters = true;
@@ -95,10 +97,11 @@ namespace FancyWeatherAPI.API
 
                 if (animation != null && animation.IsValid() && animation.Name != null)
                 {
-                    LoadedAnimations.TryAdd(animation.Name, animation);
+                    if (LoadedAnimations.TryAdd(animation.Name, animation))
+                        nbAnim++;
                 }
 
-                return LoadedAnimations.Count;
+                return nbAnim;
             }
             catch (Exception ex)
             {
