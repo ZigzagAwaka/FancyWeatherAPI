@@ -22,7 +22,6 @@ namespace FancyWeatherAPI.API
 
             if (valid)
             {
-                Plugin.logger.LogError("azerty : " + Frames.Count);
                 string fullFrame = "";
                 for (int i = 0; i < Frames.Count; i++)
                 {
@@ -32,13 +31,13 @@ namespace FancyWeatherAPI.API
                     {
                         FullFrames.Add(fullFrame);
                         fullFrame = "";
-                        Plugin.logger.LogError("frame added : " + FullFrames.Count);
                     }
                     else
                     {
                         fullFrame += Environment.NewLine;
                     }
                 }
+                Plugin.DebugLog($"[FancyWeatherAnimation] The {Name} animation is valid");
             }
 
             return valid;
@@ -47,10 +46,6 @@ namespace FancyWeatherAPI.API
 
         public string[] GetFullFrames()
         {
-            foreach (string frame in FullFrames)
-            {
-                Plugin.logger.LogError(frame);
-            }
             return FullFrames.ToArray();
         }
     }

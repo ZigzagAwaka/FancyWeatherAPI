@@ -101,8 +101,7 @@ namespace FancyWeatherAPI.API
 
                 if (animation != null && animation.IsValid() && animation.Name != null)
                 {
-                    bool v = LoadedAnimations.TryAdd(animation.Name, animation);
-                    Plugin.logger.LogError("valid: " + v);
+                    LoadedAnimations.TryAdd(animation.Name, animation);
                 }
 
                 return LoadedAnimations.Count;

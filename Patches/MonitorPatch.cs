@@ -13,15 +13,13 @@ namespace FancyWeatherAPI.Patches
         [HarmonyPatch("UpdateWeatherMonitors")]
         public static void InjectNewWeatherAnimations()
         {
-            Plugin.logger.LogError("Injecting new weather animations into monitors...");
             if (Settings.SetupFinished && MonitorsHelper._fancyWeatherMonitorTexts.Count > 0 && StartOfRound.Instance.currentLevel != null)
             {
                 string weatherName = WeatherManager.GetCurrentLevelWeather().Name;
-                Plugin.logger.LogError(weatherName);
 
                 if (AnimationLoader.LoadedAnimations.TryGetValue(weatherName, out FancyWeatherAnimation weatherAnimation))
                 {
-                    Plugin.logger.LogError("loaded");
+                    Plugin.DebugLog("[MonitorPatch] Injecting weather animation for " + weatherName);
                     MonitorsHelper._curWeatherAnimations = weatherAnimation.GetFullFrames();
                     MonitorsHelper._weatherHasOverlays = weatherAnimation.WithOverlay;
 
