@@ -46,7 +46,6 @@ The format of the file is the following :
 ```
 Parameters
 Name: Snowfall
-LightningOverlay: false
 
 Animation
 
@@ -91,7 +90,9 @@ This is the place where specific parameters are specified, such as the Name of t
 
 - **Color:** Use this parameter to define the color of the frames that will be displayed on the monitor using a Hex format like #ff4ff9 **(this parameter is optional)**
 
-- **LightningOverlay:** Set this parameter to true to activate the special Stormy thunder overlay on top of your animation. **(this parameter is optional)**
+- **IsOverlay:** Set this parameter to true to define this animation as an overlay so it can be used by other animations with the OverlayName parameter. **(this parameter is optional)**
+
+- **OverlayName:** Specify the name of the animation that will be used as an overlay for this animation, the overlay needs to have been loaded with the IsOverlay parameter set to true. **(this parameter is optional)**
 
 Each time a new Parameters area is detected in the file, there will be a new animation scanning. This means you can actually enter 2 or more animations by writting in succession a Parameters area, then an Animation area, then other Parameters and Animation areas.
 
