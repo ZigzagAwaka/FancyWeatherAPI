@@ -19,9 +19,9 @@ namespace FancyWeatherAPI.API
         public string? ColorHex { get; set; }
 
         /// <summary>
-        /// Define if the animation has the stormy weather overlay (lightning) or not
+        /// Define the overlay key used by the animation if it is not null
         /// </summary>
-        public bool WithLightningOverlay { get; set; } = false;
+        public string? OverlayKey { get; set; }
 
         /// <summary>
         /// The list of lines that compose the animation, each 4 lines will be considered as a single frame, this is required for the animation to be valid

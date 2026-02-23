@@ -15,6 +15,7 @@ namespace FancyWeatherAPI.Patches
     internal class MonitorPatch
     {
         internal static string? _curWeatherColorHex;
+        internal static string? _curOverlayColorHex;
 
         /// <summary>
         /// Patch the UpdateWeatherMonitors method to inject our custom weather animations. This will replace the existing weather monitor text with our own animations if available.
@@ -45,14 +46,23 @@ namespace FancyWeatherAPI.Patches
 
                 _curWeatherColorHex = animationFound ? weatherAnimation.ColorHex : null;
                 MonitorsHelper._curWeatherAnimations = animationFound ? weatherAnimation.GetFullFrames() : WeatherASCIIArt.UnknownAnimations;
-                MonitorsHelper._weatherHasOverlays = animationFound && weatherAnimation.WithLightningOverlay;
 
-                if (MonitorsHelper._weatherHasOverlays)
+                if (animationFound && weatherAnimation.OverlayKey != null)
                 {
-                    MonitorsHelper._weatherOverlayTimer = 0;
-                    MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3);
-                    MonitorsHelper._curWeatherOverlays = WeatherASCIIArt.LightningOverlays;
-                    MonitorsHelper._curWeatherOverlayIndex = Random.Range(0, MonitorsHelper._curWeatherOverlays.Length);
+                    MonitorsHelper._weatherHasOverlays = AnimationLoader.LoadedOverlays.TryGetValue(weatherAnimation.OverlayKey, out FancyWeatherAnimation weatherOverlay);
+
+                    if (MonitorsHelper._weatherHasOverlays)
+                    {
+                        _curOverlayColorHex = weatherOverlay.ColorHex;
+                        MonitorsHelper._weatherOverlayTimer = 0;
+                        MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3);
+                        MonitorsHelper._curWeatherOverlays = weatherOverlay.GetFullFrames();
+                        MonitorsHelper._curWeatherOverlayIndex = Random.Range(0, MonitorsHelper._curWeatherOverlays.Length);
+                    }
+                }
+                else
+                {
+                    MonitorsHelper._weatherHasOverlays = false;
                 }
 
                 MonitorsHelper._weatherShowingOverlay = false;
@@ -156,7 +166,8 @@ namespace FancyWeatherAPI.Patches
                 for (int c = 0; c < curAnimLine.Length; c++)
                 {
                     bool isOverlayChar = !string.IsNullOrWhiteSpace(overlayLine) && overlayLine.Length > c && overlayLine[c] != ' ';
-                    sb.Append(isOverlayChar ? $"<color=#ffe100>{overlayLine[c]}</color>" : (_curWeatherColorHex != null ? $"<color={_curWeatherColorHex}>{curAnimLine[c]}</color>" : $"{curAnimLine[c]}"));
+                    sb.Append(isOverlayChar ? (_curOverlayColorHex != null ? $"<color={_curOverlayColorHex}>{overlayLine[c]}</color>" : $"{overlayLine[c]}") :
+                        (_curWeatherColorHex != null ? $"<color={_curWeatherColorHex}>{curAnimLine[c]}</color>" : $"{curAnimLine[c]}"));
                 }
                 sb.AppendLine();
             }

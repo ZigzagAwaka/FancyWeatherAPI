@@ -14,6 +14,11 @@ namespace FancyWeatherAPI.API
         /// </summary>
         public static Dictionary<string, FancyWeatherAnimation> LoadedAnimations = new Dictionary<string, FancyWeatherAnimation>();
 
+        /// <summary>
+        /// Dictionary that contains all the loaded overlays, the key is the name of the overlay and the value is the corresponding FancyWeatherAnimation object
+        /// </summary>
+        public static Dictionary<string, FancyWeatherAnimation> LoadedOverlays = new Dictionary<string, FancyWeatherAnimation>();
+
 
         /// <summary>
         /// Load all the animation files located in the ASCII_Anim folder, and add them to the LoadedAnimations dictionary.
@@ -54,6 +59,7 @@ namespace FancyWeatherAPI.API
                 }
 
                 int nbAnim = 0;
+                bool isOverlay = false;
                 bool scanningParameters = false;
                 bool scanningFrames = false;
                 FancyWeatherAnimation animation = new FancyWeatherAnimation();
@@ -65,12 +71,21 @@ namespace FancyWeatherAPI.API
                     {
                         if (animation != null && animation.IsValid() && animation.Name != null)
                         {
-                            if (LoadedAnimations.TryAdd(animation.Name, animation))
-                                nbAnim++;
+                            if (!isOverlay)
+                            {
+                                if (LoadedAnimations.TryAdd(animation.Name, animation))
+                                    nbAnim++;
+                            }
+                            else
+                            {
+                                if (LoadedOverlays.TryAdd(animation.Name, animation))
+                                    nbAnim++;
+                            }
                         }
                         animation = new FancyWeatherAnimation();
                         scanningParameters = true;
                         scanningFrames = false;
+                        isOverlay = false;
                     }
                     else if (trimmedLine == "animation")
                     {
@@ -88,7 +103,8 @@ namespace FancyWeatherAPI.API
                         {
                             case "name": animation.Name = value; break;
                             case "color": animation.ColorHex = value; break;
-                            case "lightningoverlay": animation.WithLightningOverlay = value == "true"; break;
+                            case "overlayname": animation.OverlayKey = value; break;
+                            case "isoverlay": isOverlay = value.ToLower() == "true"; break;
                             default: break;
                         }
                     }
@@ -96,11 +112,7 @@ namespace FancyWeatherAPI.API
                     {
                         if (!string.IsNullOrWhiteSpace(line))
                         {
-                            string lineToAdd = line;
-                            if (lineToAdd.Length < 8)
-                            {
-                                lineToAdd = lineToAdd.PadRight(8, ' ');
-                            }
+                            string lineToAdd = line.Replace("\r", "").Replace("\n", "");
                             animation.FrameLines.Add(lineToAdd);
                         }
                     }
@@ -108,8 +120,16 @@ namespace FancyWeatherAPI.API
 
                 if (animation != null && animation.IsValid() && animation.Name != null)
                 {
-                    if (LoadedAnimations.TryAdd(animation.Name, animation))
-                        nbAnim++;
+                    if (!isOverlay)
+                    {
+                        if (LoadedAnimations.TryAdd(animation.Name, animation))
+                            nbAnim++;
+                    }
+                    else
+                    {
+                        if (LoadedOverlays.TryAdd(animation.Name, animation))
+                            nbAnim++;
+                    }
                 }
 
                 return nbAnim;
@@ -132,7 +152,6 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("None", new FancyWeatherAnimation()
                 {
                     Name = "None",
-                    WithLightningOverlay = false,
                     FullFrames = WeatherASCIIArt.ClearAnimations.ToList(),
                 });
             }
@@ -141,7 +160,6 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("Rainy", new FancyWeatherAnimation()
                 {
                     Name = "Rainy",
-                    WithLightningOverlay = false,
                     FullFrames = WeatherASCIIArt.RainAnimations.ToList(),
                 });
             }
@@ -150,7 +168,7 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("Stormy", new FancyWeatherAnimation()
                 {
                     Name = "Stormy",
-                    WithLightningOverlay = true,
+                    OverlayKey = "Stormy",
                     FullFrames = WeatherASCIIArt.RainAnimations.ToList(),
                 });
             }
@@ -159,7 +177,6 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("Flooded", new FancyWeatherAnimation()
                 {
                     Name = "Flooded",
-                    WithLightningOverlay = false,
                     FullFrames = WeatherASCIIArt.FloodedAnimations.ToList(),
                 });
             }
@@ -168,7 +185,6 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("Foggy", new FancyWeatherAnimation()
                 {
                     Name = "Foggy",
-                    WithLightningOverlay = false,
                     FullFrames = WeatherASCIIArt.FoggyAnimations.ToList(),
                 });
             }
@@ -177,8 +193,16 @@ namespace FancyWeatherAPI.API
                 LoadedAnimations.Add("Eclipsed", new FancyWeatherAnimation()
                 {
                     Name = "Eclipsed",
-                    WithLightningOverlay = false,
                     FullFrames = WeatherASCIIArt.EclipsedAnimations.ToList(),
+                });
+            }
+            if (!LoadedOverlays.ContainsKey("Stormy"))
+            {
+                LoadedOverlays.Add("Stormy", new FancyWeatherAnimation()
+                {
+                    Name = "Stormy",
+                    ColorHex = "#ffe100",
+                    FullFrames = WeatherASCIIArt.LightningOverlays.ToList(),
                 });
             }
         }
