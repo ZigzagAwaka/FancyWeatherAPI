@@ -89,6 +89,8 @@ This is the place where specific parameters are specified, such as the Name of t
 
 - **Name:** Use this parameter to define the name of the targeted weather to display this animation. This needs to match the weather name in-game perfectly in order to work. **(this parameter is required)**
 
+- **Color:** Use this parameter to define the color of the frames that will be displayed on the monitor using a Hex format like #ff4ff9 **(this parameter is optional)**
+
 - **LightningOverlay:** Set this parameter to true to activate the special Stormy thunder overlay on top of your animation. **(this parameter is optional)**
 
 Each time a new Parameters area is detected in the file, there will be a new animation scanning. This means you can actually enter 2 or more animations by writting in succession a Parameters area, then an Animation area, then other Parameters and Animation areas.

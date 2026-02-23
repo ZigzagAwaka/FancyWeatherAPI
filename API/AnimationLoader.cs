@@ -84,10 +84,13 @@ namespace FancyWeatherAPI.API
                             continue;
                         string key = parts[0].ToLower().Trim();
                         string value = parts[1].Trim();
-                        if (key == "name")
-                            animation.Name = value;
-                        else if (key == "lightningoverlay")
-                            animation.WithLightningOverlay = value == "true";
+                        switch (key)
+                        {
+                            case "name": animation.Name = value; break;
+                            case "color": animation.ColorHex = value; break;
+                            case "lightningoverlay": animation.WithLightningOverlay = value == "true"; break;
+                            default: break;
+                        }
                     }
                     else if (scanningFrames)
                     {

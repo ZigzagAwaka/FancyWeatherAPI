@@ -14,6 +14,11 @@ namespace FancyWeatherAPI.API
         public string? Name { get; set; }
 
         /// <summary>
+        /// The base color of the displayed frames
+        /// </summary>
+        public string? ColorHex { get; set; }
+
+        /// <summary>
         /// Define if the animation has the stormy weather overlay (lightning) or not
         /// </summary>
         public bool WithLightningOverlay { get; set; } = false;
@@ -56,6 +61,12 @@ namespace FancyWeatherAPI.API
                         fullFrame += Environment.NewLine;
                     }
                 }
+
+                if (ColorHex == null || !UnityEngine.ColorUtility.TryParseHtmlString(ColorHex, out _))
+                {
+                    ColorHex = null;
+                }
+
                 Plugin.DebugLog($"[FancyWeatherAnimation] The {Name} animation is valid");
             }
 
