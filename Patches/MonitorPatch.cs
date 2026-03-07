@@ -55,7 +55,7 @@ namespace FancyWeatherAPI.Patches
                     {
                         _curOverlayColorHex = weatherOverlay.ColorHex;
                         MonitorsHelper._weatherOverlayTimer = 0;
-                        MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3);
+                        MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3f);
                         MonitorsHelper._curWeatherOverlays = weatherOverlay.GetFullFrames();
                         MonitorsHelper._curWeatherOverlayIndex = Random.Range(0, MonitorsHelper._curWeatherOverlays.Length);
                     }
@@ -86,14 +86,17 @@ namespace FancyWeatherAPI.Patches
         [HarmonyPatch("AnimateSpecialMonitors")]
         public static bool AnimateSpecialMonitorsFromAPI()
         {
-            if (MonitorsHelper._fancyWeatherMonitorTexts.Count > 0 && MonitorsHelper._curWeatherAnimations.Length >= 2)
+            if (MonitorsHelper._fancyWeatherMonitorTexts.Count > 0)
             {
-                MonitorsHelper._weatherAnimTimer += Time.deltaTime;
-                if (MonitorsHelper._weatherAnimTimer >= MonitorsHelper._weatherAnimCycle)
+                if (MonitorsHelper._curWeatherAnimations.Length >= 2)
                 {
-                    MonitorsHelper._curWeatherAnimIndex = (MonitorsHelper._curWeatherAnimIndex + 1) % MonitorsHelper._curWeatherAnimations.Length;
-                    MonitorsHelper._weatherAnimTimer = 0;
-                    DrawCustomWeatherAnimation();
+                    MonitorsHelper._weatherAnimTimer += Time.deltaTime;
+                    if (MonitorsHelper._weatherAnimTimer >= MonitorsHelper._weatherAnimCycle)
+                    {
+                        MonitorsHelper._curWeatherAnimIndex = (MonitorsHelper._curWeatherAnimIndex + 1) % MonitorsHelper._curWeatherAnimations.Length;
+                        MonitorsHelper._weatherAnimTimer = 0;
+                        DrawCustomWeatherAnimation();
+                    }
                 }
 
                 if (MonitorsHelper._weatherHasOverlays)
@@ -106,7 +109,7 @@ namespace FancyWeatherAPI.Patches
 
                         if (!MonitorsHelper._weatherShowingOverlay)
                         {
-                            MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3);
+                            MonitorsHelper._weatherOverlayCycle = Random.Range(0.1f, 3f);
                             MonitorsHelper._curWeatherOverlayIndex = Random.Range(0, MonitorsHelper._curWeatherOverlays.Length);
                         }
 
